@@ -1,5 +1,6 @@
 CXX=g++
 CXXFLAGS=-std=c++17 -ggdb -Wall
+LDFLAGS=-lSDL2
 
 SRC=$(wildcard src/*.cpp)
 OBJS=$(addprefix obj/, $(SRC:.cpp=.o))
@@ -9,7 +10,7 @@ OBJS=$(addprefix obj/, $(SRC:.cpp=.o))
 all: dirs target
 
 target: $(OBJS)
-	$(CXX) $(CXXFLAGS) $^
+	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS)
 
 obj/src/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
