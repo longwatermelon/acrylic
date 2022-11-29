@@ -26,7 +26,7 @@ Token Lexer::next_tok()
     {
     case '{': advance(); return Token(TokenType::LBRACKET, "{");
     case '}': advance(); return Token(TokenType::RBRACKET, "}");
-    case '\\': advance(); return Token(TokenType::COMMAND, collect_id());
+    case '\\': advance(); return Token(TokenType::FN, collect_id());
     case '\n': advance(); return Token(TokenType::NEWLINE, "\n");
     }
 

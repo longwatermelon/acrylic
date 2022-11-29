@@ -4,7 +4,7 @@
 enum class TokenType
 {
     ID,
-    COMMAND,
+    FN,
     NEWLINE,
     LBRACKET,
     RBRACKET,

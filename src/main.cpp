@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "parser.h"
 #include <fstream>
 #include <sstream>
 
@@ -11,13 +11,8 @@ int main(int argc, char **argv)
     while (std::getline(ifs, buf))
         ss << buf << "\n";
 
-    Lexer l(ss.str());
-    Token t;
-
-    while ((t = l.next_tok()).type != TokenType::EOF_)
-    {
-        printf("%d | %s\n", (int)t.type, t.value.c_str());
-    }
+    Parser p(ss.str());
+    std::unique_ptr<Node> root = p.parse();
 
     return 0;
 }
