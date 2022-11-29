@@ -1,4 +1,6 @@
 #include "lexer.h"
+#include <vector>
+#include <algorithm>
 
 static std::vector<char> g_reserved = { '{', '}', '\n', '\\' };
 

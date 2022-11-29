@@ -1,6 +1,5 @@
 #pragma once
 #include "token.h"
-#include <functional>
 
 class Lexer
 {
