@@ -36,7 +36,9 @@ void draw::quit()
 
 void draw::draw(const Node *root)
 {
-    Drawing d = draw::fn(root->comp_values[0].get());
+    std::vector<Drawing> drawings;
+    for (const auto &e : root->comp_values)
+        drawings.emplace_back(draw_expr(e.get()));
 
     SDL_SetRenderTarget(g_rend, 0);
     SDL_Event evt;
@@ -55,8 +57,15 @@ void draw::draw(const Node *root)
 
         SDL_RenderClear(g_rend);
 
-        SDL_Rect r = { 100, 100, d.w, d.h };
-        SDL_RenderCopy(g_rend, d.tex, 0, &r);
+        int x = 100;
+        for (const auto &d : drawings)
+        {
+            SDL_Rect r = { x, 300 - d.h / 2, d.w, d.h };
+            SDL_RenderCopy(g_rend, d.tex, 0, &r);
+            x += d.w + 20;
+        }
+        /* SDL_Rect r = { 100, 100, d.w, d.h }; */
+        /* SDL_RenderCopy(g_rend, d.tex, 0, &r); */
 
         SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
         SDL_RenderPresent(g_rend);
