@@ -1,4 +1,6 @@
 #include "draw.h"
+#include <stdexcept>
+#include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -34,7 +36,7 @@ void draw::quit()
 
 void draw::draw(const Node *root)
 {
-    Drawing d = text(root->comp_values[0]->id);
+    Drawing d = draw::fn(root->comp_values[0].get());
 
     SDL_SetRenderTarget(g_rend, 0);
     SDL_Event evt;
@@ -53,11 +55,52 @@ void draw::draw(const Node *root)
 
         SDL_RenderClear(g_rend);
 
-        SDL_RenderCopy(g_rend, d.tex, 0, 0);
+        SDL_Rect r = { 100, 100, d.w, d.h };
+        SDL_RenderCopy(g_rend, d.tex, 0, &r);
 
         SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
         SDL_RenderPresent(g_rend);
     }
+}
+
+Drawing draw::draw_expr(const Node *expr)
+{
+    switch (expr->type)
+    {
+    case NodeType::FN: return fn(expr);
+    case NodeType::ID: return text(expr->id);
+    default: throw std::runtime_error("error in draw::draw_expr");
+    }
+}
+
+Drawing draw::fn(const Node *fn)
+{
+    if (fn->fn_name == "frac")
+    {
+        Drawing top = draw_expr(fn->fn_args[0].get());
+        Drawing bot = draw_expr(fn->fn_args[1].get());
+        int w = std::max(top.w, bot.w);
+        int h = top.h + bot.h + 5;
+        SDL_Texture *tex = SDL_CreateTexture(g_rend,
+            SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+            w, h);
+        SDL_SetRenderTarget(g_rend, tex);
+        SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+        SDL_RenderFillRect(g_rend, 0);
+
+        SDL_Rect rtop = { 0, 0, top.w, top.h };
+        SDL_RenderCopy(g_rend, top.tex, 0, &rtop);
+        SDL_Rect rbot = { 0, top.h + 5, bot.w, bot.h };
+        SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
+
+        SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
+        SDL_Rect rdiv = { 0, top.h + 2, w, 2 };
+        SDL_RenderFillRect(g_rend, &rdiv);
+        return { tex, w, h };
+    }
+
+    std::cerr << "Function '" << fn->fn_name << "' does not exist.\n";
+    exit(EXIT_FAILURE);
 }
 
 Drawing draw::text(const std::string &s)
