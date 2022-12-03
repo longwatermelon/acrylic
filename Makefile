@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS=-std=c++17 -ggdb -Wall
-LDFLAGS=-lSDL2
+LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_ttf
 
 SRC=$(wildcard src/*.cpp)
 OBJS=$(addprefix obj/, $(SRC:.cpp=.o))
