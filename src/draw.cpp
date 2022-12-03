@@ -19,7 +19,7 @@ void draw::init()
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         800, 600, SDL_WINDOW_SHOWN);
     g_rend = SDL_CreateRenderer(g_win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    g_font = TTF_OpenFont("res/font.ttf", 16);
+    g_font = TTF_OpenFont("res/font.ttf", 32);
 
     SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     SDL_RenderClear(g_rend);
@@ -79,6 +79,19 @@ Drawing draw::fn(const Node *fn)
     {
         Drawing top = draw_expr(fn->fn_args[0].get());
         Drawing bot = draw_expr(fn->fn_args[1].get());
+
+        if (fn->fn_args[0]->type != NodeType::ID)
+        {
+            top.w *= .5f;
+            top.h *= .5f;
+        }
+
+        if (fn->fn_args[1]->type != NodeType::ID)
+        {
+            bot.w *= .5f;
+            bot.h *= .5f;
+        }
+
         int w = std::max(top.w, bot.w);
         int h = top.h + bot.h + 5;
         SDL_Texture *tex = SDL_CreateTexture(g_rend,
@@ -88,9 +101,9 @@ Drawing draw::fn(const Node *fn)
         SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
         SDL_RenderFillRect(g_rend, 0);
 
-        SDL_Rect rtop = { 0, 0, top.w, top.h };
+        SDL_Rect rtop = { (w - top.w) / 2, 0, top.w, top.h };
         SDL_RenderCopy(g_rend, top.tex, 0, &rtop);
-        SDL_Rect rbot = { 0, top.h + 5, bot.w, bot.h };
+        SDL_Rect rbot = { (w - bot.w) / 2, top.h + 5, bot.w, bot.h };
         SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
 
         SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
