@@ -66,7 +66,7 @@ int main(int argc, char **argv)
         while (std::getline(ifs, buf))
             ss << buf << "\n";
 
-        run(ss.str(), true);
+        run(ss.str(), false);
     }
 
     draw::quit();
