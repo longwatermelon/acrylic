@@ -19,7 +19,7 @@ void draw::init()
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         800, 600, SDL_WINDOW_SHOWN);
     g_rend = SDL_CreateRenderer(g_win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    g_font = TTF_OpenFont("res/font.ttf", 64);
+    g_font = TTF_OpenFont("res/font.ttf", 32);
 
     SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     SDL_RenderClear(g_rend);
@@ -114,6 +114,7 @@ Drawing draw::compound(const Node *cpd)
 Drawing draw::fn(const Node *fn)
 {
     if (fn->fn_name == "frac") return functions::frac(fn);
+    if (fn->fn_name == "sum") return functions::sum(fn);
     if (fn->fn_name == "^") return functions::exponent(fn);
     if (fn->fn_name == "_") return functions::subscript(fn);
 
@@ -161,6 +162,44 @@ Drawing draw::functions::frac(const Node *fn)
 
     SDL_DestroyTexture(top.tex);
     SDL_DestroyTexture(bot.tex);
+    return { tex, w, h };
+}
+
+Drawing draw::functions::sum(const Node *fn)
+{
+    Drawing bot = draw_expr(fn->fn_args[0].get());
+    Drawing top = draw_expr(fn->fn_args[1].get());
+    Drawing expr = draw_expr(fn->fn_args[2].get());
+    bot.resize(.5f);
+    top.resize(.5f);
+
+    SDL_Rect rsigma = { 0, top.h, 70, 70 };
+    int w = std::max(rsigma.w, std::max(bot.w, top.w)) + 10 + expr.w;
+    int h = rsigma.h + bot.h + top.h;
+    SDL_Texture *tex = SDL_CreateTexture(g_rend,
+        SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+        w, h);
+    SDL_SetRenderTarget(g_rend, tex);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_RenderFillRect(g_rend, 0);
+
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
+    SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y, rsigma.x + rsigma.w, rsigma.y);
+    SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y, rsigma.x + (rsigma.w * 3 / 4), rsigma.y + rsigma.h / 2);
+    SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y + rsigma.h - 1, rsigma.x + (rsigma.w * 3 / 4), rsigma.y + rsigma.h / 2);
+    SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y + rsigma.h - 1, rsigma.x + rsigma.w, rsigma.y + rsigma.h - 1);
+
+    SDL_Rect rtop = { rsigma.w / 2 - top.w / 2, 0, top.w, top.h };
+    SDL_RenderCopy(g_rend, top.tex, 0, &rtop);
+    SDL_Rect rbot = { rsigma.w / 2 - bot.w / 2, top.h + rsigma.h, bot.w, bot.h };
+    SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
+    SDL_Rect rexpr = { rsigma.x + rsigma.w + 10, (h - expr.h) / 2, expr.w, expr.h };
+    SDL_RenderCopy(g_rend, expr.tex, 0, &rexpr);
+
+    SDL_DestroyTexture(bot.tex);
+    SDL_DestroyTexture(top.tex);
+    SDL_DestroyTexture(expr.tex);
+
     return { tex, w, h };
 }
 

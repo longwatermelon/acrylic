@@ -5,7 +5,8 @@
 static std::unordered_map<std::string, size_t> g_fn_param_nums = {
     { "frac", 2 },
     { "_", 2 },
-    { "^", 2 }
+    { "^", 2 },
+    { "sum", 3 }
 };
 
 Parser::Parser(const std::string &prog)
