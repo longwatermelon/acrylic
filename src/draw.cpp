@@ -19,7 +19,7 @@ void draw::init()
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         800, 600, SDL_WINDOW_SHOWN);
     g_rend = SDL_CreateRenderer(g_win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    g_font = TTF_OpenFont("res/font.ttf", 128);
+    g_font = TTF_OpenFont("res/font.ttf", 64);
 
     SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     SDL_RenderClear(g_rend);
@@ -138,17 +138,8 @@ Drawing draw::functions::frac(const Node *fn)
     Drawing top = draw_expr(fn->fn_args[0].get());
     Drawing bot = draw_expr(fn->fn_args[1].get());
 
-    if (fn->fn_args[0]->type != NodeType::ID)
-    {
-        top.w *= .5f;
-        top.h *= .5f;
-    }
-
-    if (fn->fn_args[1]->type != NodeType::ID)
-    {
-        bot.w *= .5f;
-        bot.h *= .5f;
-    }
+    if (fn->fn_args[0]->type != NodeType::ID) top.resize(.5f);
+    if (fn->fn_args[1]->type != NodeType::ID) bot.resize(.5f);
 
     int w = std::max(top.w, bot.w);
     int h = top.h + bot.h + 5;
@@ -178,8 +169,7 @@ Drawing draw::functions::exponent(const Node *fn)
     Drawing base = draw_expr(fn->fn_args[0].get());
     Drawing exp = draw_expr(fn->fn_args[1].get());
 
-    exp.w /= 2;
-    exp.h /= 2;
+    exp.resize(.5f);
     int w = base.w + exp.w;
     int h = base.h;
 
@@ -204,8 +194,7 @@ Drawing draw::functions::subscript(const Node *fn)
     Drawing base = draw_expr(fn->fn_args[0].get());
     Drawing sub = draw_expr(fn->fn_args[1].get());
 
-    sub.w /= 2;
-    sub.h /= 2;
+    sub.resize(.5f);
     int w = base.w + sub.w;
     int h = base.h;
 

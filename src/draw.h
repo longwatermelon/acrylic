@@ -6,6 +6,12 @@ struct Drawing
 {
     SDL_Texture *tex{ nullptr };
     int w, h;
+
+    void resize(float s)
+    {
+        w *= s;
+        h *= s;
+    }
 };
 
 namespace draw
