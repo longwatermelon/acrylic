@@ -240,6 +240,7 @@ Drawing draw::functions::frac(const Node *fn)
 
 Drawing draw::functions::sum(const Node *fn)
 {
+    Drawing sigma = { IMG_LoadTexture(g_rend, "res/sigma.png"), 70, 70 };
     Drawing bot = draw_expr(fn->fn_args[0].get());
     Drawing top = draw_expr(fn->fn_args[1].get());
     bot.resize(.5f);
@@ -258,17 +259,14 @@ Drawing draw::functions::sum(const Node *fn)
     SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderFillRect(g_rend, 0);
 
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
-    SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y, rsigma.x + rsigma.w, rsigma.y);
-    SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y, rsigma.x + (rsigma.w * 3 / 4), rsigma.y + rsigma.h / 2);
-    SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y + rsigma.h - 1, rsigma.x + (rsigma.w * 3 / 4), rsigma.y + rsigma.h / 2);
-    SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y + rsigma.h - 1, rsigma.x + rsigma.w, rsigma.y + rsigma.h - 1);
+    SDL_RenderCopy(g_rend, sigma.tex, 0, &rsigma);
 
     SDL_Rect rtop = { maxw / 2 - top.w / 2, 0, top.w, top.h };
     SDL_RenderCopy(g_rend, top.tex, 0, &rtop);
     SDL_Rect rbot = { maxw / 2 - bot.w / 2, top.h + rsigma.h, bot.w, bot.h };
     SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
 
+    SDL_DestroyTexture(sigma.tex);
     SDL_DestroyTexture(bot.tex);
     SDL_DestroyTexture(top.tex);
 
