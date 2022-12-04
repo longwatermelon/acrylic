@@ -18,7 +18,13 @@ void draw::init()
     TTF_Init();
     g_win = SDL_CreateWindow("Acrylic",
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        800, 600, SDL_WINDOW_SHOWN);
+        800, 600,
+#ifdef __EMSCRIPTEN__
+        SDL_WINDOW_SHOWN
+#else
+        SDL_WINDOW_HIDDEN
+#endif
+    );
     g_rend = SDL_CreateRenderer(g_win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     g_font = TTF_OpenFont("res/font.ttf", 64);
 
@@ -33,6 +39,18 @@ void draw::quit()
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
+}
+
+static void save_texture(const char* file_name, SDL_Renderer* renderer, SDL_Texture* texture) {
+    SDL_Texture* target = SDL_GetRenderTarget(renderer);
+    SDL_SetRenderTarget(renderer, texture);
+    int width, height;
+    SDL_QueryTexture(texture, NULL, NULL, &width, &height);
+    SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+    SDL_RenderReadPixels(renderer, NULL, surface->format->format, surface->pixels, surface->pitch);
+    IMG_SavePNG(surface, file_name);
+    SDL_FreeSurface(surface);
+    SDL_SetRenderTarget(renderer, target);
 }
 
 void draw::draw(const Node *root, bool loop)
@@ -67,6 +85,11 @@ void draw::draw(const Node *root, bool loop)
 
         if (!loop) break;
     }
+
+#ifndef __EMSCRIPTEN__
+    save_texture("out.png", g_rend, d.tex);
+#endif
+    SDL_DestroyTexture(d.tex);
 }
 
 Drawing draw::draw_expr(const Node *expr)
