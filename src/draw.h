@@ -23,7 +23,7 @@ namespace draw
     Drawing draw_expr(const Node *expr);
     Drawing compound(const Node *cpd);
     Drawing fn(const Node *fn);
-    Drawing text(const std::string &s);
+    Drawing text(std::string s);
     Drawing text_unicode(const std::wstring &s);
 
     namespace functions

@@ -122,6 +122,10 @@ std::unique_ptr<Node> Parser::parse_brackets()
         n->comp_values.emplace_back(parse_expr());
 
     expect(TokenType::RBRACKET);
+
+    if (n->comp_values.empty())
+        n->comp_values.emplace_back(std::make_unique<Node>(NodeType::NOOP));
+
     return n;
 }
 

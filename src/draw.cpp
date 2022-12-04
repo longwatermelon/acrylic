@@ -75,6 +75,7 @@ Drawing draw::draw_expr(const Node *expr)
     case NodeType::FN: return fn(expr);
     case NodeType::ID: return text(expr->id);
     case NodeType::COMPOUND: return compound(expr);
+    case NodeType::NOOP: return text(" ");
     default: throw std::runtime_error("error in draw::draw_expr");
     }
 }
@@ -140,9 +141,9 @@ Drawing draw::fn(const Node *fn)
     exit(EXIT_FAILURE);
 }
 
-Drawing draw::text(const std::string &s)
+Drawing draw::text(std::string s)
 {
-    if (s.empty()) return { nullptr };
+    if (s.empty()) s = " ";
     SDL_Surface *surf = TTF_RenderText_Blended(g_font, s.c_str(), { 255, 255, 255 });
     SDL_Texture *tex = SDL_CreateTextureFromSurface(g_rend, surf);
     SDL_FreeSurface(surf);
