@@ -21,7 +21,11 @@ static std::unordered_map<std::string, size_t> g_fn_param_nums = {
     { "mu", 0 },
     { "omega", 0 },
     { "lim", 1 },
-    { "plusminus", 0 }
+    { "plusminus", 0 },
+    { "cross", 0 },
+    { "dot", 0 },
+    { "le", 0 },
+    { "ge", 0 }
 };
 
 Parser::Parser(const std::string &prog)

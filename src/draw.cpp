@@ -144,7 +144,11 @@ Drawing draw::fn(const Node *fn)
         { "omega", L"ω" },
         { "lambda", L"λ" },
         { "mu", L"μ" },
-        { "plusminus", L"±" }
+        { "plusminus", L"±" },
+        { "cross", L"×" },
+        { "dot", L"∙" },
+        { "le", L"≤" },
+        { "ge", L"≥" }
     };
 
     if (unicode_chars.find(fn->fn_name) != unicode_chars.end())
