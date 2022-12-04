@@ -128,6 +128,11 @@ Drawing draw::fn(const Node *fn)
     if (fn->fn_name == "phi") return text_unicode(L"φ");
     if (fn->fn_name == "inf") return text_unicode(L"∞");
     if (fn->fn_name == "to") return text_unicode(L"→");
+    if (fn->fn_name == "delta") return text_unicode(L"Δ");
+    if (fn->fn_name == "epsilon") return text_unicode(L"ε");
+    if (fn->fn_name == "omega") return text_unicode(L"ω");
+    if (fn->fn_name == "lambda") return text_unicode(L"λ");
+    if (fn->fn_name == "mu") return text_unicode(L"μ");
     if (fn->fn_name == "^") return functions::exponent(fn);
     if (fn->fn_name == "_") return functions::subscript(fn);
 

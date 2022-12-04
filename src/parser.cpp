@@ -13,7 +13,10 @@ static std::unordered_map<std::string, size_t> g_fn_param_nums = {
     { "phi", 0 },
     { "delta", 0 },
     { "inf", 0 },
-    { "to", 0 }
+    { "to", 0 },
+    { "lambda", 0 },
+    { "mu", 0 },
+    { "omega", 0 }
 };
 
 Parser::Parser(const std::string &prog)
