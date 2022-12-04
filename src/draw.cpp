@@ -84,42 +84,8 @@ Drawing draw::draw_expr(const Node *expr)
 
 Drawing draw::fn(const Node *fn)
 {
-    if (fn->fn_name == "frac")
-    {
-        Drawing top = draw_expr(fn->fn_args[0].get());
-        Drawing bot = draw_expr(fn->fn_args[1].get());
-
-        if (fn->fn_args[0]->type != NodeType::ID)
-        {
-            top.w *= .5f;
-            top.h *= .5f;
-        }
-
-        if (fn->fn_args[1]->type != NodeType::ID)
-        {
-            bot.w *= .5f;
-            bot.h *= .5f;
-        }
-
-        int w = std::max(top.w, bot.w);
-        int h = top.h + bot.h + 5;
-        SDL_Texture *tex = SDL_CreateTexture(g_rend,
-            SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
-            w, h);
-        SDL_SetRenderTarget(g_rend, tex);
-        SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
-        SDL_RenderFillRect(g_rend, 0);
-
-        SDL_Rect rtop = { (w - top.w) / 2, 0, top.w, top.h };
-        SDL_RenderCopy(g_rend, top.tex, 0, &rtop);
-        SDL_Rect rbot = { (w - bot.w) / 2, top.h + 5, bot.w, bot.h };
-        SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
-
-        SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
-        SDL_Rect rdiv = { 0, top.h + 2, w, 2 };
-        SDL_RenderFillRect(g_rend, &rdiv);
-        return { tex, w, h };
-    }
+    if (fn->fn_name == "frac") return functions::frac(fn);
+    if (fn->fn_name == "^") return functions::exponent(fn);
 
     std::cerr << "Function '" << fn->fn_name << "' does not exist.\n";
     exit(EXIT_FAILURE);
@@ -134,6 +100,72 @@ Drawing draw::text(const std::string &s)
 
     int w, h;
     SDL_QueryTexture(tex, 0, 0, &w, &h);
+    return { tex, w, h };
+}
+
+Drawing draw::functions::frac(const Node *fn)
+{
+    Drawing top = draw_expr(fn->fn_args[0].get());
+    Drawing bot = draw_expr(fn->fn_args[1].get());
+
+    if (fn->fn_args[0]->type != NodeType::ID)
+    {
+        top.w *= .5f;
+        top.h *= .5f;
+    }
+
+    if (fn->fn_args[1]->type != NodeType::ID)
+    {
+        bot.w *= .5f;
+        bot.h *= .5f;
+    }
+
+    int w = std::max(top.w, bot.w);
+    int h = top.h + bot.h + 5;
+    SDL_Texture *tex = SDL_CreateTexture(g_rend,
+        SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+        w, h);
+    SDL_SetRenderTarget(g_rend, tex);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_RenderFillRect(g_rend, 0);
+
+    SDL_Rect rtop = { (w - top.w) / 2, 0, top.w, top.h };
+    SDL_RenderCopy(g_rend, top.tex, 0, &rtop);
+    SDL_Rect rbot = { (w - bot.w) / 2, top.h + 5, bot.w, bot.h };
+    SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
+
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
+    SDL_Rect rdiv = { 0, top.h + 2, w, 2 };
+    SDL_RenderFillRect(g_rend, &rdiv);
+
+    SDL_DestroyTexture(top.tex);
+    SDL_DestroyTexture(bot.tex);
+    return { tex, w, h };
+}
+
+Drawing draw::functions::exponent(const Node *fn)
+{
+    Drawing base = draw_expr(fn->fn_args[0].get());
+    Drawing exp = draw_expr(fn->fn_args[1].get());
+
+    exp.w /= 2;
+    exp.h /= 2;
+    int w = base.w + exp.w;
+    int h = base.h + exp.h;
+
+    SDL_Texture *tex = SDL_CreateTexture(g_rend,
+        SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+        w, h);
+    SDL_SetRenderTarget(g_rend, tex);
+
+    SDL_Rect rbase = { 0, exp.w / 10, base.w, base.h };
+    SDL_RenderCopy(g_rend, base.tex, 0, &rbase);
+    SDL_Rect rexp = { base.w, 0, exp.w, exp.h };
+    SDL_RenderCopy(g_rend, exp.tex, 0, &rexp);
+
+    SDL_DestroyTexture(base.tex);
+    SDL_DestroyTexture(exp.tex);
+
     return { tex, w, h };
 }
 

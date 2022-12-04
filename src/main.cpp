@@ -19,6 +19,14 @@ int main(int argc, char **argv)
     while (std::getline(ifs, buf))
         ss << buf << "\n";
 
+    /* Lexer l(ss.str()); */
+    /* Token t; */
+
+    /* while ((t = l.next_tok()).type != TokenType::EOF_) */
+    /* { */
+    /*     std::cout << t.value << "\n"; */
+    /* } */
+
     std::unique_ptr<Node> root;
 
     try

@@ -5,6 +5,7 @@ enum class TokenType
 {
     ID,
     FN,
+    INFIX_FN,
     NEWLINE,
     LBRACKET,
     RBRACKET,

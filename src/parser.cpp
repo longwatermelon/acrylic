@@ -39,7 +39,8 @@ void Parser::expect(TokenType type)
     if (m_curr.type != type)
     {
         throw std::runtime_error(
-            "Unexpected token '" + m_curr.value + "' on line " + std::to_string(m_line));
+            "Unexpected token '" + m_curr.value + "' on line " + std::to_string(m_line) +
+            ", expected type " + std::to_string((int)type));
     }
     else
     {
@@ -55,15 +56,32 @@ std::unique_ptr<Node> Parser::parse_expr()
         ++m_line;
     }
 
+    std::unique_ptr<Node> n;
+
     switch (m_curr.type)
     {
     case TokenType::FN:
-        return parse_fn();
+        n = parse_fn();
+        break;
     case TokenType::ID:
-        return parse_id();
+        n = parse_id();
+        break;
     default:
-        return nullptr;
+        n = nullptr;
+        break;
     }
+
+    if (m_curr.type == TokenType::INFIX_FN)
+    {
+        std::unique_ptr<Node> fn = std::make_unique<Node>(NodeType::FN);
+        fn->fn_name = m_curr.value;
+        fn->fn_args.emplace_back(std::move(n));
+        expect(TokenType::INFIX_FN);
+        fn->fn_args.emplace_back(parse_expr());
+        return fn;
+    }
+
+    return n;
 }
 
 std::unique_ptr<Node> Parser::parse_id()

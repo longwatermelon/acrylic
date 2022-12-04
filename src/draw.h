@@ -17,5 +17,12 @@ namespace draw
     Drawing draw_expr(const Node *expr);
     Drawing fn(const Node *fn);
     Drawing text(const std::string &s);
+
+    namespace functions
+    {
+        Drawing frac(const Node *fn);
+
+        Drawing exponent(const Node *fn);
+    }
 }
 

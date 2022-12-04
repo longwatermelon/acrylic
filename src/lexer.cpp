@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 
-static std::vector<char> g_reserved = { '{', '}', '\n', '\\' };
+static std::vector<char> g_reserved = { '{', '}', '\n', '\\', '^', ' ' };
 
 Lexer::Lexer(const std::string &prog)
     : m_contents(prog)
@@ -27,6 +27,7 @@ Token Lexer::next_tok()
     case '{': advance(); return Token(TokenType::LBRACKET, "{");
     case '}': advance(); return Token(TokenType::RBRACKET, "}");
     case '\\': advance(); return Token(TokenType::FN, collect_id());
+    case '^': advance(); return Token(TokenType::INFIX_FN, "^");
     case '\n': advance(); return Token(TokenType::NEWLINE, "\n");
     }
 
