@@ -19,7 +19,7 @@ void draw::init()
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         800, 600, SDL_WINDOW_SHOWN);
     g_rend = SDL_CreateRenderer(g_win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    g_font = TTF_OpenFont("res/font.ttf", 50);
+    g_font = TTF_OpenFont("res/font.ttf", 64);
 
     SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     SDL_RenderClear(g_rend);
