@@ -281,10 +281,10 @@ Drawing draw::functions::lim(const Node *fn)
     SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     SDL_RenderFillRect(g_rend, 0);
 
-    SDL_Rect rlim = { lim.w < bot.w ? bot.w / 2 - lim.w / 2 : 0, 0, lim.w, lim.h };
-    SDL_RenderCopy(g_rend, lim.tex, 0, &rlim);
     SDL_Rect rbot = { lim.w < bot.w ? 0 : lim.w / 2 - bot.w / 2, lim.h - bot.h / 2, bot.w, bot.h };
     SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
+    SDL_Rect rlim = { lim.w < bot.w ? bot.w / 2 - lim.w / 2 : 0, 0, lim.w, lim.h };
+    SDL_RenderCopy(g_rend, lim.tex, 0, &rlim);
 
     SDL_DestroyTexture(lim.tex);
     SDL_DestroyTexture(bot.tex);
