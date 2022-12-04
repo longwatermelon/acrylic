@@ -19,7 +19,7 @@ void draw::init()
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         800, 600, SDL_WINDOW_SHOWN);
     g_rend = SDL_CreateRenderer(g_win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    g_font = TTF_OpenFont("res/font.ttf", 32);
+    g_font = TTF_OpenFont("res/font.ttf", 64);
 
     SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     SDL_RenderClear(g_rend);
@@ -34,8 +34,11 @@ void draw::quit()
     SDL_Quit();
 }
 
-void draw::draw(const Node *root)
+void draw::draw(const Node *root, bool loop)
 {
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_RenderClear(g_rend);
+
     Drawing d = compound(root);
 
     SDL_SetRenderTarget(g_rend, 0);
@@ -60,6 +63,8 @@ void draw::draw(const Node *root)
 
         SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
         SDL_RenderPresent(g_rend);
+
+        if (!loop) break;
     }
 }
 
@@ -97,6 +102,8 @@ Drawing draw::compound(const Node *cpd)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         w, h);
     SDL_SetRenderTarget(g_rend, tex);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_RenderFillRect(g_rend, 0);
 
     int x = 0;
     for (auto &d : drawings)
@@ -225,6 +232,8 @@ Drawing draw::functions::exponent(const Node *fn)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         w, h);
     SDL_SetRenderTarget(g_rend, tex);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_RenderFillRect(g_rend, 0);
 
     SDL_Rect rbase = { 0, 0, base.w, base.h };
     SDL_RenderCopy(g_rend, base.tex, 0, &rbase);
@@ -250,6 +259,8 @@ Drawing draw::functions::subscript(const Node *fn)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         w, h);
     SDL_SetRenderTarget(g_rend, tex);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_RenderFillRect(g_rend, 0);
 
     SDL_Rect rbase = { 0, 0, base.w, base.h };
     SDL_RenderCopy(g_rend, base.tex, 0, &rbase);
