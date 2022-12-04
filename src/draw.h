@@ -23,6 +23,7 @@ namespace draw
         Drawing frac(const Node *fn);
 
         Drawing exponent(const Node *fn);
+        Drawing subscript(const Node *fn);
     }
 }
 
