@@ -36,9 +36,10 @@ void draw::quit()
 
 void draw::draw(const Node *root)
 {
-    std::vector<Drawing> drawings;
-    for (const auto &e : root->comp_values)
-        drawings.emplace_back(draw_expr(e.get()));
+    Drawing d = compound(root);
+    /* std::vector<Drawing> drawings; */
+    /* for (const auto &e : root->comp_values) */
+    /*     drawings.emplace_back(draw_expr(e.get())); */
 
     SDL_SetRenderTarget(g_rend, 0);
     SDL_Event evt;
@@ -57,13 +58,15 @@ void draw::draw(const Node *root)
 
         SDL_RenderClear(g_rend);
 
-        int x = 100;
-        for (const auto &d : drawings)
-        {
-            SDL_Rect r = { x, 300 - d.h / 2, d.w, d.h };
-            SDL_RenderCopy(g_rend, d.tex, 0, &r);
-            x += d.w + 20;
-        }
+        SDL_Rect r = { 400 - d.w / 2, 300 - d.h / 2, d.w, d.h };
+        SDL_RenderCopy(g_rend, d.tex, 0, &r);
+        /* int x = 100; */
+        /* for (const auto &d : drawings) */
+        /* { */
+        /*     SDL_Rect r = { x, 300 - d.h / 2, d.w, d.h }; */
+        /*     SDL_RenderCopy(g_rend, d.tex, 0, &r); */
+        /*     x += d.w + 20; */
+        /* } */
         /* SDL_Rect r = { 100, 100, d.w, d.h }; */
         /* SDL_RenderCopy(g_rend, d.tex, 0, &r); */
 
@@ -78,8 +81,44 @@ Drawing draw::draw_expr(const Node *expr)
     {
     case NodeType::FN: return fn(expr);
     case NodeType::ID: return text(expr->id);
+    case NodeType::COMPOUND: return compound(expr);
     default: throw std::runtime_error("error in draw::draw_expr");
     }
+}
+
+Drawing draw::compound(const Node *cpd)
+{
+    std::vector<Drawing> drawings;
+    for (const auto &e : cpd->comp_values)
+        drawings.emplace_back(draw_expr(e.get()));
+
+    int w = 0,
+        h = 0;
+
+    for (const auto &d : drawings)
+    {
+        if (d.h > h)
+            h = d.h;
+
+        w += d.w + 20;
+    }
+
+    SDL_Texture *tex = SDL_CreateTexture(g_rend,
+        SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+        w, h);
+    SDL_SetRenderTarget(g_rend, tex);
+
+    int x = 0;
+    for (auto &d : drawings)
+    {
+        SDL_Rect r = { x, h / 2 - d.h / 2, d.w, d.h };
+        SDL_RenderCopy(g_rend, d.tex, 0, &r);
+        x += d.w + 20;
+
+        SDL_DestroyTexture(d.tex);
+    }
+
+    return { tex, w, h };
 }
 
 Drawing draw::fn(const Node *fn)

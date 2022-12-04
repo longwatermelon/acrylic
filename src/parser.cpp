@@ -1,5 +1,8 @@
 #include "parser.h"
 #include <stdexcept>
+#include <unordered_map>
+
+static std::unordered_map<std::string, size_t> g_fn_param_nums;
 
 Parser::Parser(const std::string &prog)
     : m_lexer(prog)
@@ -66,6 +69,9 @@ std::unique_ptr<Node> Parser::parse_expr()
     case TokenType::ID:
         n = parse_id();
         break;
+    case TokenType::LBRACKET:
+        n = parse_brackets();
+        break;
     default:
         n = nullptr;
         break;
@@ -89,6 +95,18 @@ std::unique_ptr<Node> Parser::parse_id()
     std::unique_ptr<Node> n = std::make_unique<Node>(NodeType::ID);
     n->id = m_curr.value;
     expect(TokenType::ID);
+    return n;
+}
+
+std::unique_ptr<Node> Parser::parse_brackets()
+{
+    expect(TokenType::LBRACKET);
+    std::unique_ptr<Node> n = std::make_unique<Node>(NodeType::COMPOUND);
+
+    while (m_curr.type != TokenType::RBRACKET)
+        n->comp_values.emplace_back(parse_expr());
+
+    expect(TokenType::RBRACKET);
     return n;
 }
 

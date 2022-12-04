@@ -15,6 +15,7 @@ namespace draw
 
     void draw(const Node *root);
     Drawing draw_expr(const Node *expr);
+    Drawing compound(const Node *cpd);
     Drawing fn(const Node *fn);
     Drawing text(const std::string &s);
 

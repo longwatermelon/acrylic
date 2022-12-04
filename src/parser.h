@@ -15,6 +15,7 @@ private:
 
     std::unique_ptr<Node> parse_expr();
     std::unique_ptr<Node> parse_id();
+    std::unique_ptr<Node> parse_brackets();
     std::unique_ptr<Node> parse_fn();
 
 private:
