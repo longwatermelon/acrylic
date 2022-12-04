@@ -19,7 +19,7 @@ void draw::init()
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         800, 600, SDL_WINDOW_SHOWN);
     g_rend = SDL_CreateRenderer(g_win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    g_font = TTF_OpenFont("res/font.ttf", 64);
+    g_font = TTF_OpenFont("res/font.ttf", 128);
 
     SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     SDL_RenderClear(g_rend);
@@ -178,8 +178,8 @@ Drawing draw::functions::exponent(const Node *fn)
     Drawing base = draw_expr(fn->fn_args[0].get());
     Drawing exp = draw_expr(fn->fn_args[1].get());
 
-    exp.w /= 3;
-    exp.h /= 3;
+    exp.w /= 2;
+    exp.h /= 2;
     int w = base.w + exp.w;
     int h = base.h;
 
@@ -204,8 +204,8 @@ Drawing draw::functions::subscript(const Node *fn)
     Drawing base = draw_expr(fn->fn_args[0].get());
     Drawing sub = draw_expr(fn->fn_args[1].get());
 
-    sub.w /= 3;
-    sub.h /= 3;
+    sub.w /= 2;
+    sub.h /= 2;
     int w = base.w + sub.w;
     int h = base.h;
 
