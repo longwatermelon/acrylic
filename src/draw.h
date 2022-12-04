@@ -33,6 +33,7 @@ namespace draw
         Drawing integral(const Node *fn);
         Drawing ointegral(const Node *fn);
         Drawing lim(const Node *fn);
+        Drawing vec(const Node *fn);
 
         Drawing exponent(const Node *fn);
         Drawing subscript(const Node *fn);

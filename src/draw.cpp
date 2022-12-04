@@ -126,6 +126,7 @@ Drawing draw::fn(const Node *fn)
     if (fn->fn_name == "int") return functions::integral(fn);
     if (fn->fn_name == "oint") return functions::ointegral(fn);
     if (fn->fn_name == "lim") return functions::lim(fn);
+    if (fn->fn_name == "vec") return functions::vec(fn);
 
     if (fn->fn_name == "pi") return text_unicode(L"π");
     if (fn->fn_name == "theta") return text_unicode(L"θ");
@@ -240,7 +241,7 @@ Drawing draw::functions::integral(const Node *fn)
 {
     Drawing sign = { IMG_LoadTexture(g_rend, "res/integral.png"), 0, 0 };
     SDL_QueryTexture(sign.tex, 0, 0, &sign.w, &sign.h);
-    sign.resize(1.5f);
+    sign.resize(2.f);
     return sign;
 }
 
@@ -248,7 +249,7 @@ Drawing draw::functions::ointegral(const Node *fn)
 {
     Drawing sign = { IMG_LoadTexture(g_rend, "res/ointegral.png"), 0, 0 };
     SDL_QueryTexture(sign.tex, 0, 0, &sign.w, &sign.h);
-    sign.resize(1.5f);
+    sign.resize(2.f);
     return sign;
 }
 
@@ -277,6 +278,32 @@ Drawing draw::functions::lim(const Node *fn)
     SDL_DestroyTexture(bot.tex);
 
     return { tex, w, h };
+}
+
+Drawing draw::functions::vec(const Node *fn)
+{
+    Drawing term = draw_expr(fn->fn_args[0].get());
+    SDL_Texture *tex = SDL_CreateTexture(g_rend,
+        SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+        term.w, term.h);
+    SDL_SetRenderTarget(g_rend, tex);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_RenderFillRect(g_rend, 0);
+
+    SDL_Rect rterm = { 0, 0, term.w, term.h };
+    SDL_RenderCopy(g_rend, term.tex, 0, &rterm);
+
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
+    int w = term.w;
+    SDL_RenderDrawLine(g_rend, 0, 4, w, 4);
+    SDL_RenderDrawLine(g_rend, 0, 5, w, 5);
+    SDL_RenderDrawLine(g_rend, w, 4, w - 4, 0);
+    SDL_RenderDrawLine(g_rend, w, 5, w - 5, 0);
+    SDL_RenderDrawLine(g_rend, w, 4, w - 4, 8);
+    SDL_RenderDrawLine(g_rend, w, 5, w - 5, 10);
+
+    SDL_DestroyTexture(term.tex);
+    return { tex, term.w, term.h };
 }
 
 Drawing draw::functions::exponent(const Node *fn)
