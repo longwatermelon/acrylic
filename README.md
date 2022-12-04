@@ -29,6 +29,9 @@ Exponent and subscript can be combined like this:
 `\vec{var}`: Vector notation
 * ex. `\vec{a}`
 
+`\sqrt{expr}`: Square root
+* ex. `\sqrt{4}`
+
 Identifiers can be grouped together by either not leaving whitespace or using `{}`.
 * ex. `2^a+b` or `2^{a + b}` will put `a + b` in the exponent, while `2^a + b` will only raise 2 to a.
 
