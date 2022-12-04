@@ -20,7 +20,8 @@ static std::unordered_map<std::string, size_t> g_fn_param_nums = {
     { "lambda", 0 },
     { "mu", 0 },
     { "omega", 0 },
-    { "lim", 1 }
+    { "lim", 1 },
+    { "plusminus", 0 }
 };
 
 Parser::Parser(const std::string &prog)

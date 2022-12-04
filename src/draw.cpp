@@ -1,6 +1,7 @@
 #include "draw.h"
 #include <stdexcept>
 #include <iostream>
+#include <unordered_map>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -15,7 +16,7 @@ void draw::init()
     SDL_Init(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
     TTF_Init();
-    g_win = SDL_CreateWindow("Draw",
+    g_win = SDL_CreateWindow("Acrylic",
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         800, 600, SDL_WINDOW_SHOWN);
     g_rend = SDL_CreateRenderer(g_win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -129,18 +130,25 @@ Drawing draw::fn(const Node *fn)
     if (fn->fn_name == "vec") return functions::vec(fn);
     if (fn->fn_name == "sqrt") return functions::sqrt(fn);
 
-    if (fn->fn_name == "pi") return text_unicode(L"π");
-    if (fn->fn_name == "theta") return text_unicode(L"θ");
-    if (fn->fn_name == "phi") return text_unicode(L"φ");
-    if (fn->fn_name == "inf") return text_unicode(L"∞");
-    if (fn->fn_name == "to") return text_unicode(L"→");
-    if (fn->fn_name == "delta") return text_unicode(L"Δ");
-    if (fn->fn_name == "epsilon") return text_unicode(L"ε");
-    if (fn->fn_name == "omega") return text_unicode(L"ω");
-    if (fn->fn_name == "lambda") return text_unicode(L"λ");
-    if (fn->fn_name == "mu") return text_unicode(L"μ");
     if (fn->fn_name == "^") return functions::exponent(fn);
     if (fn->fn_name == "_") return functions::subscript(fn);
+
+    std::unordered_map<std::string, std::wstring> unicode_chars = {
+        { "pi", L"π" },
+        { "theta", L"θ" },
+        { "phi", L"φ" },
+        { "inf", L"∞" },
+        { "to", L"→" },
+        { "delta", L"Δ" },
+        { "epsilon", L"ε" },
+        { "omega", L"ω" },
+        { "lambda", L"λ" },
+        { "mu", L"μ" },
+        { "plusminus", L"±" }
+    };
+
+    if (unicode_chars.find(fn->fn_name) != unicode_chars.end())
+        return text_unicode(unicode_chars[fn->fn_name]);
 
     std::cerr << "Function '" << fn->fn_name << "' does not exist.\n";
     exit(EXIT_FAILURE);
