@@ -206,7 +206,10 @@ Drawing draw::functions::sum(const Node *fn)
     bot.resize(.5f);
     top.resize(.5f);
 
-    SDL_Rect rsigma = { 0, top.h, 70, 70 };
+    int maxw = std::max(70, std::max(top.w, bot.w));
+    SDL_Rect rsigma = {
+        maxw / 2 - 70 / 2,
+        top.h, 70, 70 };
     int w = std::max(rsigma.w, std::max(bot.w, top.w)) + 10 + expr.w;
     int h = rsigma.h + bot.h + top.h;
     SDL_Texture *tex = SDL_CreateTexture(g_rend,
@@ -222,9 +225,9 @@ Drawing draw::functions::sum(const Node *fn)
     SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y + rsigma.h - 1, rsigma.x + (rsigma.w * 3 / 4), rsigma.y + rsigma.h / 2);
     SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y + rsigma.h - 1, rsigma.x + rsigma.w, rsigma.y + rsigma.h - 1);
 
-    SDL_Rect rtop = { rsigma.w / 2 - top.w / 2, 0, top.w, top.h };
+    SDL_Rect rtop = { maxw / 2 - top.w / 2, 0, top.w, top.h };
     SDL_RenderCopy(g_rend, top.tex, 0, &rtop);
-    SDL_Rect rbot = { rsigma.w / 2 - bot.w / 2, top.h + rsigma.h, bot.w, bot.h };
+    SDL_Rect rbot = { maxw / 2 - bot.w / 2, top.h + rsigma.h, bot.w, bot.h };
     SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
     SDL_Rect rexpr = { rsigma.x + rsigma.w + 10, (h - expr.h) / 2, expr.w, expr.h };
     SDL_RenderCopy(g_rend, expr.tex, 0, &rexpr);
