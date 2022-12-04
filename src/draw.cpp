@@ -124,6 +124,8 @@ Drawing draw::fn(const Node *fn)
     if (fn->fn_name == "frac") return functions::frac(fn);
     if (fn->fn_name == "sum") return functions::sum(fn);
     if (fn->fn_name == "int") return functions::integral(fn);
+    if (fn->fn_name == "lim") return functions::lim(fn);
+
     if (fn->fn_name == "pi") return text_unicode(L"π");
     if (fn->fn_name == "theta") return text_unicode(L"θ");
     if (fn->fn_name == "phi") return text_unicode(L"φ");
@@ -240,6 +242,33 @@ Drawing draw::functions::integral(const Node *fn)
     SDL_QueryTexture(sign.tex, 0, 0, &sign.w, &sign.h);
     sign.resize(1.5f);
     return sign;
+}
+
+Drawing draw::functions::lim(const Node *fn)
+{
+    Drawing lim = text("lim");
+    Drawing bot = draw_expr(fn->fn_args[0].get());
+    lim.resize(.6f);
+    bot.resize(.4f);
+
+    int w = std::max(lim.w, bot.w);
+    int h = lim.h + bot.h;
+    SDL_Texture *tex = SDL_CreateTexture(g_rend,
+        SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+        w, h);
+    SDL_SetRenderTarget(g_rend, tex);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_RenderFillRect(g_rend, 0);
+
+    SDL_Rect rlim = { lim.w < bot.w ? bot.w / 2 - lim.w / 2 : 0, 0, lim.w, lim.h };
+    SDL_RenderCopy(g_rend, lim.tex, 0, &rlim);
+    SDL_Rect rbot = { lim.w < bot.w ? 0 : lim.w / 2 - bot.w / 2, lim.h - bot.h / 2, bot.w, bot.h };
+    SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
+
+    SDL_DestroyTexture(lim.tex);
+    SDL_DestroyTexture(bot.tex);
+
+    return { tex, w, h };
 }
 
 Drawing draw::functions::exponent(const Node *fn)
