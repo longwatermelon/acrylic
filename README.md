@@ -36,3 +36,13 @@ Identifiers can be grouped together by either not leaving whitespace or using `{
 * ex. `2^a+b` or `2^{a + b}` will put `a + b` in the exponent, while `2^a + b` will only raise 2 to a.
 
 Some constants (`\pi`, `\inf`) and greek letters (`\theta`, `\phi`, `\delta`, `\lambda`) have been implemented as well.
+
+`\plusminus`: Plus minus sign
+
+`\le`: <=
+
+`\ge`: >=
+
+`\cross`: Cross product
+
+`\dot`: Dot product
