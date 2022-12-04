@@ -88,10 +88,10 @@ Drawing draw::compound(const Node *cpd)
         if (d.h > h)
             h = d.h;
 
-        w += d.w + 20;
+        w += d.w + 10;
     }
 
-    w -= 20;
+    w -= 10;
 
     SDL_Texture *tex = SDL_CreateTexture(g_rend,
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -103,7 +103,7 @@ Drawing draw::compound(const Node *cpd)
     {
         SDL_Rect r = { x, h / 2 - d.h / 2, d.w, d.h };
         SDL_RenderCopy(g_rend, d.tex, 0, &r);
-        x += d.w + 20;
+        x += d.w + 10;
 
         SDL_DestroyTexture(d.tex);
     }
@@ -115,6 +115,7 @@ Drawing draw::fn(const Node *fn)
 {
     if (fn->fn_name == "frac") return functions::frac(fn);
     if (fn->fn_name == "sum") return functions::sum(fn);
+    if (fn->fn_name == "int") return functions::integral(fn);
     if (fn->fn_name == "^") return functions::exponent(fn);
     if (fn->fn_name == "_") return functions::subscript(fn);
 
@@ -201,6 +202,14 @@ Drawing draw::functions::sum(const Node *fn)
     SDL_DestroyTexture(expr.tex);
 
     return { tex, w, h };
+}
+
+Drawing draw::functions::integral(const Node *fn)
+{
+    Drawing sign = { IMG_LoadTexture(g_rend, "res/integral.png"), 0, 0 };
+    SDL_QueryTexture(sign.tex, 0, 0, &sign.w, &sign.h);
+    sign.resize(1.5f);
+    return sign;
 }
 
 Drawing draw::functions::exponent(const Node *fn)
