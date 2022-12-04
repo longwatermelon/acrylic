@@ -2,7 +2,11 @@
 #include <stdexcept>
 #include <unordered_map>
 
-static std::unordered_map<std::string, size_t> g_fn_param_nums;
+static std::unordered_map<std::string, size_t> g_fn_param_nums = {
+    { "frac", 2 },
+    { "_", 2 },
+    { "^", 2 }
+};
 
 Parser::Parser(const std::string &prog)
     : m_lexer(prog)
@@ -116,12 +120,8 @@ std::unique_ptr<Node> Parser::parse_fn()
     fn->fn_name = m_curr.value;
     expect(TokenType::FN);
 
-    while (m_curr.type == TokenType::LBRACKET)
-    {
-        expect(TokenType::LBRACKET);
+    while (fn->fn_args.size() < g_fn_param_nums[fn->fn_name])
         fn->fn_args.emplace_back(parse_expr());
-        expect(TokenType::RBRACKET);
-    }
 
     return fn;
 }
