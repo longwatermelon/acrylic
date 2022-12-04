@@ -173,9 +173,8 @@ Drawing draw::functions::frac(const Node *fn)
 {
     Drawing top = draw_expr(fn->fn_args[0].get());
     Drawing bot = draw_expr(fn->fn_args[1].get());
-
-    if (fn->fn_args[0]->type != NodeType::ID) top.resize(.5f);
-    if (fn->fn_args[1]->type != NodeType::ID) bot.resize(.5f);
+    top.resize(.5f);
+    bot.resize(.5f);
 
     int w = std::max(top.w, bot.w);
     int h = top.h + bot.h + 5;
