@@ -12,6 +12,7 @@ public:
 private:
     void advance();
     std::string collect_id();
+    std::string collect_alpha();
 
 private:
     std::string m_contents;

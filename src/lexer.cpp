@@ -26,7 +26,7 @@ Token Lexer::next_tok()
     {
     case '{': advance(); return Token(TokenType::LBRACKET, "{");
     case '}': advance(); return Token(TokenType::RBRACKET, "}");
-    case '\\': advance(); return Token(TokenType::FN, collect_id());
+    case '\\': advance(); return Token(TokenType::FN, collect_alpha());
     case '^': advance(); return Token(TokenType::INFIX_FN, "^");
     case '_': advance(); return Token(TokenType::INFIX_FN, "_");
     case '\n': advance(); return Token(TokenType::NEWLINE, "\n");
@@ -45,6 +45,15 @@ std::string Lexer::collect_id()
 {
     size_t begin = m_idx;
     while (std::find(g_reserved.begin(), g_reserved.end(), m_ch) == g_reserved.end())
+        advance();
+
+    return m_contents.substr(begin, m_idx - begin);
+}
+
+std::string Lexer::collect_alpha()
+{
+    size_t begin = m_idx;
+    while (std::isalpha(m_ch))
         advance();
 
     return m_contents.substr(begin, m_idx - begin);

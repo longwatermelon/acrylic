@@ -123,6 +123,11 @@ Drawing draw::fn(const Node *fn)
     if (fn->fn_name == "frac") return functions::frac(fn);
     if (fn->fn_name == "sum") return functions::sum(fn);
     if (fn->fn_name == "int") return functions::integral(fn);
+    if (fn->fn_name == "pi") return text_unicode(L"π");
+    if (fn->fn_name == "theta") return text_unicode(L"θ");
+    if (fn->fn_name == "phi") return text_unicode(L"φ");
+    if (fn->fn_name == "inf") return text_unicode(L"∞");
+    if (fn->fn_name == "to") return text_unicode(L"→");
     if (fn->fn_name == "^") return functions::exponent(fn);
     if (fn->fn_name == "_") return functions::subscript(fn);
 
@@ -134,6 +139,18 @@ Drawing draw::text(const std::string &s)
 {
     if (s.empty()) return { nullptr };
     SDL_Surface *surf = TTF_RenderText_Blended(g_font, s.c_str(), { 255, 255, 255 });
+    SDL_Texture *tex = SDL_CreateTextureFromSurface(g_rend, surf);
+    SDL_FreeSurface(surf);
+
+    int w, h;
+    SDL_QueryTexture(tex, 0, 0, &w, &h);
+    return { tex, w, h };
+}
+
+Drawing draw::text_unicode(const std::wstring &s)
+{
+    if (s.empty()) return { nullptr };
+    SDL_Surface *surf = TTF_RenderUNICODE_Blended(g_font, (const Uint16*)s.c_str(), { 255, 255, 255 });
     SDL_Texture *tex = SDL_CreateTextureFromSurface(g_rend, surf);
     SDL_FreeSurface(surf);
 

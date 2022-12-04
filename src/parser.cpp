@@ -7,7 +7,13 @@ static std::unordered_map<std::string, size_t> g_fn_param_nums = {
     { "_", 2 },
     { "^", 2 },
     { "sum", 3 },
-    { "int", 0 }
+    { "int", 0 },
+    { "pi", 0 },
+    { "theta", 0 },
+    { "phi", 0 },
+    { "delta", 0 },
+    { "inf", 0 },
+    { "to", 0 }
 };
 
 Parser::Parser(const std::string &prog)
