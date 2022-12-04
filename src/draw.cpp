@@ -87,10 +87,10 @@ void draw::draw(const Node *root, bool loop)
     }
 
 #ifndef __EMSCRIPTEN__
-    std::cout << "Save file as: ";
+    std::cout << "Save file as [default: out.png]: ";
     std::string out;
     std::getline(std::cin, out);
-    save_texture(out.c_str(), g_rend, d.tex);
+    save_texture(out.empty() ? "out.png" : out.c_str(), g_rend, d.tex);
 #endif
     SDL_DestroyTexture(d.tex);
 }
