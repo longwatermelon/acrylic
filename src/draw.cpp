@@ -127,6 +127,7 @@ Drawing draw::fn(const Node *fn)
     if (fn->fn_name == "oint") return functions::ointegral(fn);
     if (fn->fn_name == "lim") return functions::lim(fn);
     if (fn->fn_name == "vec") return functions::vec(fn);
+    if (fn->fn_name == "sqrt") return functions::sqrt(fn);
 
     if (fn->fn_name == "pi") return text_unicode(L"π");
     if (fn->fn_name == "theta") return text_unicode(L"θ");
@@ -303,6 +304,33 @@ Drawing draw::functions::vec(const Node *fn)
 
     SDL_DestroyTexture(term.tex);
     return { tex, term.w, term.h };
+}
+
+Drawing draw::functions::sqrt(const Node *fn)
+{
+    Drawing term = draw_expr(fn->fn_args[0].get());
+    int w = term.w + 10;
+    int h = term.h;
+    SDL_Texture *tex = SDL_CreateTexture(g_rend,
+        SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+        w, h);
+    SDL_SetRenderTarget(g_rend, tex);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_RenderFillRect(g_rend, 0);
+
+    SDL_Rect rterm = { 10, 0, term.w, term.h };
+    SDL_RenderCopy(g_rend, term.tex, 0, &rterm);
+
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
+    SDL_RenderDrawLine(g_rend, 0, h - 20, 8, h);
+    SDL_RenderDrawLine(g_rend, 0, h - 19, 9, h);
+    SDL_RenderDrawLine(g_rend, 8, 0, 8, h);
+    SDL_RenderDrawLine(g_rend, 7, 0, 7, h);
+    SDL_RenderDrawLine(g_rend, 8, 0, w, 0);
+    SDL_RenderDrawLine(g_rend, 8, 1, w, 1);
+
+    SDL_DestroyTexture(term.tex);
+    return { tex, w, h };
 }
 
 Drawing draw::functions::exponent(const Node *fn)

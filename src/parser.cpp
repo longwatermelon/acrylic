@@ -10,6 +10,7 @@ static std::unordered_map<std::string, size_t> g_fn_param_nums = {
     { "int", 0 },
     { "oint", 0 },
     { "vec", 1 },
+    { "sqrt", 1},
     { "pi", 0 },
     { "theta", 0 },
     { "phi", 0 },
