@@ -124,6 +124,7 @@ Drawing draw::fn(const Node *fn)
     if (fn->fn_name == "frac") return functions::frac(fn);
     if (fn->fn_name == "sum") return functions::sum(fn);
     if (fn->fn_name == "int") return functions::integral(fn);
+    if (fn->fn_name == "oint") return functions::ointegral(fn);
     if (fn->fn_name == "lim") return functions::lim(fn);
 
     if (fn->fn_name == "pi") return text_unicode(L"π");
@@ -238,6 +239,14 @@ Drawing draw::functions::sum(const Node *fn)
 Drawing draw::functions::integral(const Node *fn)
 {
     Drawing sign = { IMG_LoadTexture(g_rend, "res/integral.png"), 0, 0 };
+    SDL_QueryTexture(sign.tex, 0, 0, &sign.w, &sign.h);
+    sign.resize(1.5f);
+    return sign;
+}
+
+Drawing draw::functions::ointegral(const Node *fn)
+{
+    Drawing sign = { IMG_LoadTexture(g_rend, "res/ointegral.png"), 0, 0 };
     SDL_QueryTexture(sign.tex, 0, 0, &sign.w, &sign.h);
     sign.resize(1.5f);
     return sign;
