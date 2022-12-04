@@ -28,7 +28,7 @@ void draw::init()
     g_rend = SDL_CreateRenderer(g_win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     g_font = TTF_OpenFont("res/font.ttf", 64);
 
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderClear(g_rend);
 }
 
@@ -55,7 +55,7 @@ static void save_texture(const char* file_name, SDL_Renderer* renderer, SDL_Text
 
 void draw::draw(const Node *root, bool loop)
 {
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderClear(g_rend);
 
     Drawing d = compound(root);
@@ -80,7 +80,7 @@ void draw::draw(const Node *root, bool loop)
         SDL_Rect r = { 400 - d.w / 2, 300 - d.h / 2, d.w, d.h };
         SDL_RenderCopy(g_rend, d.tex, 0, &r);
 
-        SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
         SDL_RenderPresent(g_rend);
 
         if (!loop) break;
@@ -130,7 +130,7 @@ Drawing draw::compound(const Node *cpd)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         w, h);
     SDL_SetRenderTarget(g_rend, tex);
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderFillRect(g_rend, 0);
 
     int x = 0;
@@ -187,7 +187,7 @@ Drawing draw::fn(const Node *fn)
 Drawing draw::text(std::string s)
 {
     if (s.empty()) s = " ";
-    SDL_Surface *surf = TTF_RenderText_Blended(g_font, s.c_str(), { 255, 255, 255 });
+    SDL_Surface *surf = TTF_RenderText_Blended(g_font, s.c_str(), { 0, 0, 0 });
     SDL_Texture *tex = SDL_CreateTextureFromSurface(g_rend, surf);
     SDL_FreeSurface(surf);
 
@@ -199,7 +199,7 @@ Drawing draw::text(std::string s)
 Drawing draw::text_unicode(const std::wstring &s)
 {
     if (s.empty()) return { nullptr };
-    SDL_Surface *surf = TTF_RenderUNICODE_Blended(g_font, (const Uint16*)s.c_str(), { 255, 255, 255 });
+    SDL_Surface *surf = TTF_RenderUNICODE_Blended(g_font, (const Uint16*)s.c_str(), { 0, 0, 0 });
     SDL_Texture *tex = SDL_CreateTextureFromSurface(g_rend, surf);
     SDL_FreeSurface(surf);
 
@@ -221,7 +221,7 @@ Drawing draw::functions::frac(const Node *fn)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         w, h);
     SDL_SetRenderTarget(g_rend, tex);
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderFillRect(g_rend, 0);
 
     SDL_Rect rtop = { (w - top.w) / 2, 0, top.w, top.h };
@@ -229,7 +229,7 @@ Drawing draw::functions::frac(const Node *fn)
     SDL_Rect rbot = { (w - bot.w) / 2, top.h + 5, bot.w, bot.h };
     SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
 
-    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     SDL_Rect rdiv = { 0, top.h + 2, w, 2 };
     SDL_RenderFillRect(g_rend, &rdiv);
 
@@ -255,10 +255,10 @@ Drawing draw::functions::sum(const Node *fn)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         w, h);
     SDL_SetRenderTarget(g_rend, tex);
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderFillRect(g_rend, 0);
 
-    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y, rsigma.x + rsigma.w, rsigma.y);
     SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y, rsigma.x + (rsigma.w * 3 / 4), rsigma.y + rsigma.h / 2);
     SDL_RenderDrawLine(g_rend, rsigma.x, rsigma.y + rsigma.h - 1, rsigma.x + (rsigma.w * 3 / 4), rsigma.y + rsigma.h / 2);
@@ -304,7 +304,7 @@ Drawing draw::functions::lim(const Node *fn)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         w, h);
     SDL_SetRenderTarget(g_rend, tex);
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderFillRect(g_rend, 0);
 
     SDL_Rect rbot = { lim.w < bot.w ? 0 : lim.w / 2 - bot.w / 2, lim.h - bot.h / 2, bot.w, bot.h };
@@ -325,13 +325,13 @@ Drawing draw::functions::vec(const Node *fn)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         term.w, term.h);
     SDL_SetRenderTarget(g_rend, tex);
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderFillRect(g_rend, 0);
 
     SDL_Rect rterm = { 0, 0, term.w, term.h };
     SDL_RenderCopy(g_rend, term.tex, 0, &rterm);
 
-    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     int w = term.w;
     SDL_RenderDrawLine(g_rend, 0, 4, w, 4);
     SDL_RenderDrawLine(g_rend, 0, 5, w, 5);
@@ -353,13 +353,13 @@ Drawing draw::functions::sqrt(const Node *fn)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         w, h);
     SDL_SetRenderTarget(g_rend, tex);
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderFillRect(g_rend, 0);
 
     SDL_Rect rterm = { 10, 0, term.w, term.h };
     SDL_RenderCopy(g_rend, term.tex, 0, &rterm);
 
-    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
     SDL_RenderDrawLine(g_rend, 0, h - 20, 8, h);
     SDL_RenderDrawLine(g_rend, 0, h - 19, 9, h);
     SDL_RenderDrawLine(g_rend, 8, 0, 8, h);
@@ -384,7 +384,7 @@ Drawing draw::functions::exponent(const Node *fn)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         w, h);
     SDL_SetRenderTarget(g_rend, tex);
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderFillRect(g_rend, 0);
 
     SDL_Rect rbase = { 0, 0, base.w, base.h };
@@ -411,7 +411,7 @@ Drawing draw::functions::subscript(const Node *fn)
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
         w, h);
     SDL_SetRenderTarget(g_rend, tex);
-    SDL_SetRenderDrawColor(g_rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderFillRect(g_rend, 0);
 
     SDL_Rect rbase = { 0, 0, base.w, base.h };
