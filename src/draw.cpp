@@ -202,7 +202,6 @@ Drawing draw::functions::sum(const Node *fn)
 {
     Drawing bot = draw_expr(fn->fn_args[0].get());
     Drawing top = draw_expr(fn->fn_args[1].get());
-    Drawing expr = draw_expr(fn->fn_args[2].get());
     bot.resize(.5f);
     top.resize(.5f);
 
@@ -210,7 +209,7 @@ Drawing draw::functions::sum(const Node *fn)
     SDL_Rect rsigma = {
         maxw / 2 - 70 / 2,
         top.h, 70, 70 };
-    int w = std::max(rsigma.w, std::max(bot.w, top.w)) + 10 + expr.w;
+    int w = std::max(rsigma.w, std::max(bot.w, top.w));
     int h = rsigma.h + bot.h + top.h;
     SDL_Texture *tex = SDL_CreateTexture(g_rend,
         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -229,12 +228,9 @@ Drawing draw::functions::sum(const Node *fn)
     SDL_RenderCopy(g_rend, top.tex, 0, &rtop);
     SDL_Rect rbot = { maxw / 2 - bot.w / 2, top.h + rsigma.h, bot.w, bot.h };
     SDL_RenderCopy(g_rend, bot.tex, 0, &rbot);
-    SDL_Rect rexpr = { rsigma.x + rsigma.w + 10, (h - expr.h) / 2, expr.w, expr.h };
-    SDL_RenderCopy(g_rend, expr.tex, 0, &rexpr);
 
     SDL_DestroyTexture(bot.tex);
     SDL_DestroyTexture(top.tex);
-    SDL_DestroyTexture(expr.tex);
 
     return { tex, w, h };
 }
