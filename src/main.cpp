@@ -33,6 +33,7 @@ void interactive()
 #endif
 #ifdef __EMSCRIPTEN__
         std::string line = emscripten_run_script_string("prompt('Input formula:');");
+        std::cout << line << "\n";
 #else
         std::cout << "Input (:q to quit): ";
         std::string line;
