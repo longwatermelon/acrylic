@@ -162,7 +162,7 @@ Drawing draw::fn(const Node *fn)
     std::unordered_map<std::string, std::wstring> unicode_chars = {
         { "pi", L"π" },
         { "theta", L"θ" },
-        { "phi", L"φ" },
+        { "phi", L"ϕ" },
         { "inf", L"∞" },
         { "to", L"→" },
         { "delta", L"Δ" },
