@@ -18,7 +18,7 @@ void draw::init()
     TTF_Init();
     g_win = SDL_CreateWindow("Acrylic",
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        800, 600,
+        2000, 600,
 #ifdef __EMSCRIPTEN__
         SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
 #else
@@ -65,9 +65,9 @@ void draw::draw(const Node *root)
 #ifdef __EMSCRIPTEN__
     SDL_RenderClear(g_rend);
 
-    SDL_SetWindowSize(g_win, d.w, 600);
+    /* SDL_SetWindowSize(g_win, d.w, 600); */
 
-    SDL_Rect r = { 0, 300 - d.h / 2, d.w, d.h };
+    SDL_Rect r = { (2000 - d.w) / 2, 300 - d.h / 2, d.w, d.h };
     SDL_RenderCopy(g_rend, d.tex, 0, &r);
 
     SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
