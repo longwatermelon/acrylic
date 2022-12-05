@@ -7,7 +7,7 @@
 #include <emscripten/emscripten.h>
 #endif
 
-void run(const std::string &s, bool loop)
+void run(const std::string &s)
 {
     std::unique_ptr<Node> root;
 
@@ -22,7 +22,7 @@ void run(const std::string &s, bool loop)
         exit(EXIT_FAILURE);
     }
 
-    draw::draw(root.get(), loop);
+    draw::draw(root.get());
 }
 
 void interactive()
@@ -43,7 +43,7 @@ void interactive()
             break;
 #endif
 
-        run(line + '\n', false);
+        run(line + '\n');
 #ifndef __EMSCRIPTEN__
     }
 #endif
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
         while (std::getline(ifs, buf))
             ss << buf << "\n";
 
-        run(ss.str(), false);
+        run(ss.str());
     }
 
     draw::quit();

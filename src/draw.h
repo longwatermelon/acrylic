@@ -19,7 +19,7 @@ namespace draw
     void init();
     void quit();
 
-    void draw(const Node *root, bool loop);
+    void draw(const Node *root);
     Drawing draw_expr(const Node *expr);
     Drawing compound(const Node *cpd);
     Drawing fn(const Node *fn);

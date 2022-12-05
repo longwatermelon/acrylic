@@ -20,7 +20,7 @@ void draw::init()
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         800, 600,
 #ifdef __EMSCRIPTEN__
-        SDL_WINDOW_SHOWN
+        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
 #else
         SDL_WINDOW_HIDDEN
 #endif
@@ -53,7 +53,7 @@ static void save_texture(const char* file_name, SDL_Renderer* renderer, SDL_Text
     SDL_SetRenderTarget(renderer, target);
 }
 
-void draw::draw(const Node *root, bool loop)
+void draw::draw(const Node *root)
 {
     SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderClear(g_rend);
@@ -61,30 +61,21 @@ void draw::draw(const Node *root, bool loop)
     Drawing d = compound(root);
 
     SDL_SetRenderTarget(g_rend, 0);
-    SDL_Event evt;
-    bool running = true;
 
-    while (running)
-    {
-        while (SDL_PollEvent(&evt))
-        {
-            switch (evt.type)
-            {
-            case SDL_QUIT:
-                running = false;
-            }
-        }
+#ifdef __EMSCRIPTEN__
+    int wy;
+    SDL_GetWindowSize(g_win, nullptr, &wy);
 
-        SDL_RenderClear(g_rend);
+    SDL_RenderClear(g_rend);
 
-        SDL_Rect r = { 400 - d.w / 2, 300 - d.h / 2, d.w, d.h };
-        SDL_RenderCopy(g_rend, d.tex, 0, &r);
+    SDL_SetWindowSize(g_win, d.w, wy);
 
-        SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
-        SDL_RenderPresent(g_rend);
+    SDL_Rect r = { 0, 300 - d.h / 2, d.w, d.h };
+    SDL_RenderCopy(g_rend, d.tex, 0, &r);
 
-        if (!loop) break;
-    }
+    SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
+    SDL_RenderPresent(g_rend);
+#endif
 
 #ifndef __EMSCRIPTEN__
     std::cout << "Save file as [default: out.png]: ";
