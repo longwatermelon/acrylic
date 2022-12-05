@@ -63,12 +63,9 @@ void draw::draw(const Node *root)
     SDL_SetRenderTarget(g_rend, 0);
 
 #ifdef __EMSCRIPTEN__
-    int wy;
-    SDL_GetWindowSize(g_win, nullptr, &wy);
-
     SDL_RenderClear(g_rend);
 
-    SDL_SetWindowSize(g_win, d.w, wy);
+    SDL_SetWindowSize(g_win, d.w, 600);
 
     SDL_Rect r = { 0, 300 - d.h / 2, d.w, d.h };
     SDL_RenderCopy(g_rend, d.tex, 0, &r);
