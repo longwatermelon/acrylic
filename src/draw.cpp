@@ -20,7 +20,7 @@ void draw::init()
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         2000, 600,
 #ifdef __EMSCRIPTEN__
-        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
+        SDL_WINDOW_SHOWN
 #else
         SDL_WINDOW_HIDDEN
 #endif
@@ -67,6 +67,7 @@ void draw::draw(const Node *root)
 
     /* SDL_SetWindowSize(g_win, d.w, 600); */
 
+    std::cout << "render\n";
     SDL_Rect r = { (2000 - d.w) / 2, 300 - d.h / 2, d.w, d.h };
     SDL_RenderCopy(g_rend, d.tex, 0, &r);
 
