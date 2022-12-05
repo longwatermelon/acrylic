@@ -196,7 +196,7 @@ Module['FS_createPath']("/", "res", true, true);
     }
 
     }
-    loadPackage({"files": [{"filename": "/res/font.ttf", "start": 0, "end": 586780}, {"filename": "/res/integral.png", "start": 586780, "end": 592180}, {"filename": "/res/ointegral.png", "start": 592180, "end": 597832}, {"filename": "/res/sigma.png", "start": 597832, "end": 598685}], "remote_package_size": 598685});
+    loadPackage({"files": [{"filename": "/res/font.ttf", "start": 0, "end": 1689704}, {"filename": "/res/integral.png", "start": 1689704, "end": 1695104}, {"filename": "/res/ointegral.png", "start": 1695104, "end": 1700756}, {"filename": "/res/sigma.png", "start": 1700756, "end": 1701609}], "remote_package_size": 1701609});
 
   })();
 
