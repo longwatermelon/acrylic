@@ -166,7 +166,10 @@ Drawing draw::fn(const Node *fn)
         { "beta", L"β" },
         { "gamma", L"γ" },
         { "Phi", L"Φ" },
-        { "Omega", L"Ω" }
+        { "Omega", L"Ω" },
+        { "rho", L"ρ" },
+        { "sigma", L"σ" },
+        { "tau", L"τ" }
     };
 
     if (unicode_chars.find(fn->fn_name) != unicode_chars.end())
