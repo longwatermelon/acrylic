@@ -7,6 +7,8 @@
 #include <emscripten/emscripten.h>
 #endif
 
+bool g_ask_filename = true;
+
 void run(const std::string &s)
 {
     std::unique_ptr<Node> root;
@@ -22,7 +24,7 @@ void run(const std::string &s)
         exit(EXIT_FAILURE);
     }
 
-    draw::draw(root.get());
+    draw::draw(root.get(), g_ask_filename);
 }
 
 void interactive()
@@ -45,6 +47,12 @@ int main(int argc, char **argv)
 #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(interactive, -1, 1);
 #endif
+
+    if (argc >= 3)
+    {
+        if (strcmp(argv[2], "-y") == 0)
+            g_ask_filename = false;
+    }
 
     if (argc == 1)
         interactive();

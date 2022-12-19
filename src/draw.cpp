@@ -53,7 +53,7 @@ static void save_texture(const char* file_name, SDL_Renderer* renderer, SDL_Text
     SDL_SetRenderTarget(renderer, target);
 }
 
-void draw::draw(const Node *root)
+void draw::draw(const Node *root, bool ask_filename)
 {
     SDL_SetRenderDrawColor(g_rend, 255, 255, 255, 255);
     SDL_RenderClear(g_rend);
@@ -73,10 +73,17 @@ void draw::draw(const Node *root)
 #endif
 
 #ifndef __EMSCRIPTEN__
-    std::cout << "Save file as [default: out.png]: ";
-    std::string out;
-    std::getline(std::cin, out);
-    save_texture(out.empty() ? "out.png" : out.c_str(), g_rend, d.tex);
+    std::string out = "out.png";
+    if (ask_filename)
+    {
+        std::cout << "Save file as [default: out.png]: ";
+        std::getline(std::cin, out);
+
+        if (out.empty())
+            out = "out.png";
+    }
+
+    save_texture(out.c_str(), g_rend, d.tex);
 #endif
     SDL_DestroyTexture(d.tex);
 }
