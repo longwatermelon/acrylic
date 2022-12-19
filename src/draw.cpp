@@ -164,7 +164,9 @@ Drawing draw::fn(const Node *fn)
         { "ell", L"ℓ" },
         { "alpha", L"α" },
         { "beta", L"β" },
-        { "gamma", L"γ" }
+        { "gamma", L"γ" },
+        { "Phi", L"Φ" },
+        { "Omega", L"Ω" }
     };
 
     if (unicode_chars.find(fn->fn_name) != unicode_chars.end())
