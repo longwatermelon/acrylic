@@ -25,7 +25,8 @@ static std::unordered_map<std::string, size_t> g_fn_param_nums = {
     { "cross", 0 },
     { "dot", 0 },
     { "le", 0 },
-    { "ge", 0 }
+    { "ge", 0 },
+    { "ell", 0 }
 };
 
 Parser::Parser(const std::string &prog)

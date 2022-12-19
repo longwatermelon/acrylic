@@ -27,26 +27,16 @@ void run(const std::string &s)
 
 void interactive()
 {
-#ifndef __EMSCRIPTEN__
-    while (true)
-    {
-#endif
 #ifdef __EMSCRIPTEN__
-        std::string line = emscripten_run_script_string("prompt('Input formula:');");
-        std::cout << line << "\n";
+    std::string line = emscripten_run_script_string("prompt('Input formula:');");
+    std::cout << line << "\n";
 #else
-        std::cout << "Input (:q to quit): ";
-        std::string line;
-        std::getline(std::cin, line);
-
-        if (line == ":q")
-            break;
+    std::cout << "Input: ";
+    std::string line;
+    std::getline(std::cin, line);
 #endif
 
-        run(line + '\n');
-#ifndef __EMSCRIPTEN__
-    }
-#endif
+    run(line + '\n');
 }
 
 int main(int argc, char **argv)

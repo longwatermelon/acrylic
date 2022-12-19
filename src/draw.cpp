@@ -160,7 +160,8 @@ Drawing draw::fn(const Node *fn)
         { "cross", L"×" },
         { "dot", L"∙" },
         { "le", L"≤" },
-        { "ge", L"≥" }
+        { "ge", L"≥" },
+        { "ell", L"ℓ" }
     };
 
     if (unicode_chars.find(fn->fn_name) != unicode_chars.end())
