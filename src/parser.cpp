@@ -7,26 +7,9 @@ static std::unordered_map<std::string, size_t> g_fn_param_nums = {
     { "_", 2 },
     { "^", 2 },
     { "sum", 2 },
-    { "int", 0 },
-    { "oint", 0 },
     { "vec", 1 },
     { "sqrt", 1},
-    { "pi", 0 },
-    { "theta", 0 },
-    { "phi", 0 },
-    { "delta", 0 },
-    { "inf", 0 },
-    { "to", 0 },
-    { "lambda", 0 },
-    { "mu", 0 },
-    { "omega", 0 },
-    { "lim", 1 },
-    { "plusminus", 0 },
-    { "cross", 0 },
-    { "dot", 0 },
-    { "le", 0 },
-    { "ge", 0 },
-    { "ell", 0 }
+    { "lim", 1 }
 };
 
 Parser::Parser(const std::string &prog)
@@ -145,7 +128,11 @@ std::unique_ptr<Node> Parser::parse_fn()
     fn->fn_name = m_curr.value;
     expect(TokenType::FN);
 
-    while (fn->fn_args.size() < g_fn_param_nums[fn->fn_name])
+    size_t nparams = 0;
+    if (g_fn_param_nums.find(fn->fn_name) != g_fn_param_nums.end())
+        nparams = g_fn_param_nums[fn->fn_name];
+
+    while (fn->fn_args.size() < nparams)
         fn->fn_args.emplace_back(parse_expr());
 
     return fn;

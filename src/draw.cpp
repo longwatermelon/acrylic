@@ -161,7 +161,10 @@ Drawing draw::fn(const Node *fn)
         { "dot", L"∙" },
         { "le", L"≤" },
         { "ge", L"≥" },
-        { "ell", L"ℓ" }
+        { "ell", L"ℓ" },
+        { "alpha", L"α" },
+        { "beta", L"β" },
+        { "gamma", L"γ" }
     };
 
     if (unicode_chars.find(fn->fn_name) != unicode_chars.end())
